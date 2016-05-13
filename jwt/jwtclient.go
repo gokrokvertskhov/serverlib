@@ -14,13 +14,13 @@ func ClientInit(keyFile string) {
   publicKey, _ = ioutil.ReadFile(keyFile)
 }
 
-func IsValidTokenRequest(r *http.Request) bool {
+func IsValidTokenRequest(r *http.Request) (bool, *jwt.Token) {
   token, err := jwt.ParseFromRequest(r, func(token *jwt.Token) ([]byte, error) {
     return publicKey, nil
   })
   if token.Valid {
-  	return true
+  	return true, token
   } else {
-    return false
+    return false, token
   }
 }
