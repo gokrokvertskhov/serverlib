@@ -1,3 +1,4 @@
+package jwt
 import (
    jwt "github.com/dgrijalva/jwt-go"
    "io/ioutil"
