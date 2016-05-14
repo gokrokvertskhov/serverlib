@@ -3,7 +3,7 @@ import (
    jwt "github.com/dgrijalva/jwt-go"
    "io/ioutil"
    "net/http"
-   "fmt"
+   "log"
 )
 
 var (
@@ -15,12 +15,18 @@ func ClientInit(keyFile string) {
 }
 
 func IsValidTokenRequest(r *http.Request) (bool, *jwt.Token) {
-  token, err := jwt.ParseFromRequest(r, func(token *jwt.Token) ([]byte, error) {
+  token, err := jwt.ParseFromRequest(r, func(*jwt.Token) (interface{}, error) {
     return publicKey, nil
   })
-  if token.Valid {
-  	return true, token
+  if err != nil {
+    log.Printf("Error %s", err)
   } else {
-    return false, token
+    if token.Valid {
+      return true, token
+    } else {
+      return false, token
+    }
   }
+  return false, nil
+
 }

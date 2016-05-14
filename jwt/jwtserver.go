@@ -2,21 +2,20 @@ package jwt
 import (
   jwt "github.com/dgrijalva/jwt-go"
   "io/ioutil"
-  "net/http"
-  "fmt"
+  "time"
 )
 
 var (
   privateKey []byte
-  default_ttl int
+  default_ttl int64
 )
 
-func ServerInit( key_path string, ttl int) {
+func ServerInit( key_path string, ttl int64) {
   privateKey, _ = ioutil.ReadFile(key_path)
   default_ttl = ttl
 }
 
-func CreateToken(user_id int, ttl int) (string, *jwt.Token) {
+func CreateToken(user_id int, ttl int64) (string, *jwt.Token) {
 	 token := jwt.New(jwt.GetSigningMethod("RS256"))
 	 token.Claims["ID"] = user_id
 	 if ttl == 0 {
